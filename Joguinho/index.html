@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOGUINHO</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <center>FAÇA SUA APOSTA!</center> 
+    <br>
+    <form>
+        <select id="aposta">
+            <option value="1">Círculo</option>
+            <option value="2">Quadrado</option>
+            <option value="3">Retângulo</option>
+        </select>
+    </form>
+    <button id="botaoDesenhar" onclick="desenhar()">Desenhar</button><br><br>
+
+    <div>
+        <strong>Acertos:</strong> <span id="acertos">0</span> | 
+        <strong>Erros:</strong> <span id="erros">0</span>
+    </div>
+    <br>
+
+    <canvas id="x" width="400" height="400" style="border:1px solid black;"></canvas>
+
+<script>
+    let totalAcertos = 0;
+    let totalErros = 0;
+    let totalJogadas = 0;
+
+    function desenhar() {
+        if (totalJogadas >= 50) {
+            return;
+        }
+
+        totalJogadas++;
+        const ultimaJogada = totalJogadas === 50;
+        if (ultimaJogada) {
+            document.getElementById('botaoDesenhar').disabled = true;
+        }
+
+        let aposta = document.getElementById('aposta');
+        aposta = Number(aposta.value);
+        let sorteio = Math.floor(Math.random() * (4 - 1) + 1); 
+
+        let canvas = document.getElementById('x');
+        let x = canvas.getContext('2d');
+        x.clearRect(0, 0, 400, 400);
+        x.beginPath();
+
+        if (sorteio == 1) {
+            x.fillStyle = "red";
+            x.strokeStyle = "black";
+            x.arc(100, 75, 50, 0, 2 * Math.PI);
+            x.fill();
+            x.stroke();
+        } 
+        else if (sorteio == 2) {
+            x.fillStyle = "green";
+            x.strokeStyle = "black";   
+            x.fillRect(10, 10, 50, 50); 
+            x.strokeRect(10, 10, 50, 50);
+        } 
+        else {
+            x.fillStyle = "blue";
+            x.strokeStyle = "black";
+            x.fillRect(10, 10, 150, 50);
+            x.strokeRect(10, 10, 150, 50);
+        }
+
+        setTimeout(() => {
+            if (aposta == sorteio) {
+                totalAcertos++;
+                document.getElementById('acertos').textContent = totalAcertos;
+                alert("Parabéns! Você acertou!");
+            } else {
+                totalErros++;
+                document.getElementById('erros').textContent = totalErros;
+                alert("Que pena! Você errou!");
+            }
+
+            if (ultimaJogada) {
+                alert("Você jogou 50 vezes, o jogo será encerrado!");
+            }
+            
+                if (totalAcertos <= 5) {
+                    alert("Você é um péssimo jogador! Você acertou apenas " + totalAcertos + " vezes.");
+                } 
+                else if (totalAcertos <= 10) {
+                    alert("Você é um jogador ruim! Você acertou " + totalAcertos + " vezes.");
+                } 
+                else if (totalAcertos <= 30) {
+                    alert("Você é um jogador bom! Você acertou " + totalAcertos + " vezes.");
+                } 
+                else {
+                    alert("Você é um bom jogador! Você acertou " + totalAcertos + " vezes.");
+                }
+            
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
